@@ -1,0 +1,86 @@
+.register-page {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--verde);
+  padding: 2rem;
+}
+
+.register-container {
+  width: 100%;
+  max-width: 450px;
+}
+
+.register-card {
+  background: var(--card-bg);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.register-header p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.register-card form {
+  margin-bottom: 1.5rem;
+}
+
+.form-hint {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.register-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.register-footer p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .register-page {
+    padding: 1rem;
+  }
+
+  .register-card {
+    padding: 2rem 1.5rem;
+  }
+}

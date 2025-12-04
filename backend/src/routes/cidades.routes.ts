@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { CidadeController } from '../controllers/cidades.controller';
+
+const router = Router();
+const controller = new CidadeController();
+
+// Rotas específicas primeiro para evitar conflitos
+router.get('/pais/:id', controller.listarPorPais);
+router.get('/continente/:id', controller.listarPorContinente);
+router.get('/:id', controller.buscarPorId);
+router.get('/', controller.listar);
+router.post('/', controller.criar);
+router.put('/:id', controller.atualizar);
+router.delete('/:id', controller.excluir);
+
+export default router;

@@ -1,0 +1,115 @@
+// SCHEMA PRISMA - VIAGEMTRACK
+// estrutura do banco de dados usando Prisma ORM
+// Documentação: https://pris.ly/d/prisma-schema
+
+// Configuração do Prisma Client (gerador de código TypeScript)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuração da conexão com o banco de dados PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")  // String de conexão vem do arquivo .env
+}
+
+// MODELOS DE DADOS
+
+// Tabela de Continentes
+
+model Continente {
+  id        Int      @id @default(autoincrement())  // Chave primária 
+  nome      String   @unique @db.VarChar(100)       // Nome único do continente
+  descricao String?  @db.Text                       // Descrição opcional 
+  createdAt DateTime @default(now())                // Data de criação (preenchida automaticamente)
+  updatedAt DateTime @updatedAt                     // Data de atualização (atualizada automaticamente)
+
+  // Relacionamentos
+  paises Pais[]  // Um continente tem vários países (relacionamento 1:N)
+
+  @@map("continentes")  // Nome da tabela no banco de dados
+}
+
+// Tabela de Países
+
+model Pais {
+  id              Int      @id @default(autoincrement())  // Chave primária 
+  nome            String   @db.VarChar(100)               // Nome do país 
+  populacao       BigInt?                                 // População total 
+  capital         String?  @db.VarChar(100)               // Capital do país 
+  idioma          String?  @db.VarChar(100)               // Idiomas falados
+  idiomaOficial   String?  @db.VarChar(100)               // Idioma oficial
+  moeda           String?  @db.VarChar(50)                // Moeda 
+  codigoISO       String?  @db.VarChar(2)                 // Código ISO-2 (ex: "BR") - usado para bandeiras
+  codigoPais      String?  @db.VarChar(3)                 // Código ISO-3 (ex: "BRA")
+  continenteId    Int                                     // Chave estrangeira para Continente
+  createdAt       DateTime @default(now())                // Data de criação
+  updatedAt       DateTime @updatedAt                     // Data de atualização
+
+  // Relacionamentos
+  continente Continente @relation(fields: [continenteId], references: [id], onDelete: Cascade)  // Pertence a um continente
+  cidades    Cidade[]                                                                             // Um país tem várias cidades (1:N)
+
+  @@index([continenteId])  // Índice para acelerar buscas por continente
+  @@map("paises")          // Nome da tabela no banco de dados
+}
+
+// Tabela de Cidades
+
+model Cidade {
+  id         Int      @id @default(autoincrement())  // Chave primária 
+  nome       String   @db.VarChar(150)               // Nome da cidade 
+  populacao  Int?                                    // População da cidade 
+  latitude   Decimal? @db.Decimal(10, 7)            // Coordenada de latitude - opcional
+  longitude  Decimal? @db.Decimal(10, 7)            // Coordenada de longitude - opcional
+  clima      String?  @db.VarChar(100)               // Tipo de clima
+  paisId     Int                                     // Chave estrangeira para País
+  createdAt  DateTime @default(now())                // Data de criação
+  updatedAt  DateTime @updatedAt                     // Data de atualização
+
+  // Relacionamentos
+  pais    Pais     @relation(fields: [paisId], references: [id], onDelete: Cascade)  // Pertence a um país
+  visitas Visita[]                                                                    // Uma cidade pode ter várias visitas (1:N)
+
+  @@index([paisId])  // Índice para acelerar buscas por país
+  @@map("cidades")   // Nome da tabela no banco de dados
+}
+
+// Tabela de Usuários
+// Armazena dados dos usuários do sistema (diário de viagens)
+
+model Usuario {
+  id        Int      @id @default(autoincrement())  // Chave primária
+  nome      String   @db.VarChar(100)               // Nome completo do usuário
+  email     String   @unique @db.VarChar(150)       // E-mail único (usado para login)
+  senhaHash String   @db.VarChar(255)               // Senha criptografada com bcrypt
+  createdAt DateTime @default(now())                // Data de criação da conta
+  updatedAt DateTime @updatedAt                     // Data de atualização
+
+  // Relacionamentos
+  visitas Visita[]  // Um usuário pode fazer várias visitas (1:N)
+
+  @@map("usuarios")  // Nome da tabela no banco de dados
+}
+
+// Tabela de Visitas (Diário de Viagens)
+// Registra as cidades visitadas por cada usuário
+
+model Visita {
+  id         Int       @id @default(autoincrement())  // Chave primária 
+  usuarioId  Int                                      // Chave estrangeira para Usuário
+  cidadeId   Int                                      // Chave estrangeira para Cidade
+  dataVisita DateTime  @default(now())                // Data da visita (padrão: data atual)
+  comentario String?   @db.Text                       // Comentário opcional sobre a visita
+  createdAt  DateTime  @default(now())                // Data de criação do registro
+  updatedAt  DateTime  @updatedAt                     // Data de atualização
+
+  // Relacionamentos
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)  // Pertence a um usuário
+  cidade  Cidade  @relation(fields: [cidadeId], references: [id], onDelete: Cascade)   // Se refere a uma cidade
+
+  @@unique([usuarioId, cidadeId])  // Constraint Um usuário não pode visitar a mesma cidade duas vezes
+  @@index([usuarioId])             // Índice para acelerar buscas por usuário
+  @@index([cidadeId])              // Índice para acelerar buscas por cidade
+  @@map("visitas")                 // Nome da tabela no banco de dados
+}
