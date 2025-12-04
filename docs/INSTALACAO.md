@@ -49,10 +49,10 @@ git --version     # Deve mostrar 2.30.0 ou superior
 
 ```bash
 # Clone o repositório
-git clone https://github.com/mariana-lins/VIAGEMTRACK_PROGWEB_FATEC.git
+git clone https://github.com/mariana-lins/VIAGEMTRACK_FATEC.git
 
 # Entre na pasta do projeto
-cd VIAGEMTRACK_PROGWEB_FATEC
+cd VIAGEMTRACK_FATEC
 
 # Verifique a estrutura
 ls
