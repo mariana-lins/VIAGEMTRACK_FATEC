@@ -53,8 +53,8 @@ O sistema oferece:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/mariana-lins/VIAGEMTRACK_PROGWEB_FATEC.git
-cd VIAGEMTRACK_PROGWEB_FATEC
+git clone https://github.com/mariana-lins/VIAGEMTRACK_FATEC.git
+cd VIAGEMTRACK_FATEC
 
 # Configure as variáveis de ambiente
 cp backend/.env.example backend/.env
@@ -101,7 +101,7 @@ Acesse: **http://localhost:5173**
 ### Estrutura do Projeto
 
 ```
-VIAGEMTRACK_PROGWEB_FATEC/
+VIAGEMTRACK_FATEC/
 ├── backend/              # API REST em Node.js
 │   ├── src/
 │   │   ├── controllers/  # Lógica de negócio
